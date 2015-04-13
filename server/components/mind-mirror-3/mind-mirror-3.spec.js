@@ -39,7 +39,7 @@ describe('dummy test', function() {
 
         });
 
-        it ("list ports", function() {
+/*        it ("list ports", function() {
             serialPort.list(function(err, ports) {
                 ports.forEach(function(port) {
                     console.log(port.comName);
@@ -48,7 +48,7 @@ describe('dummy test', function() {
                 });
             });
 
-        });
+        });*/
 
     });
 

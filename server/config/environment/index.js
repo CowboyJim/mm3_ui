@@ -4,7 +4,7 @@ var path = require('path');
 var _ = require('lodash');
 
 function requiredProcessEnv(name) {
-  if(!process.env[name]) {
+  if (!process.env[name]) {
     throw new Error('You must set the ' + name + ' environment variable');
   }
   return process.env[name];
@@ -40,6 +40,17 @@ var all = {
       }
     }
   },
+
+  serialport: {
+    port: '/dev/tty-usbserial1',
+    options: {
+      baudRate: 9600,
+      databits: 8,
+      stopbits: 1,
+      parity: 'none',
+      buffersize: 255
+    }
+  }
 
 };
 
