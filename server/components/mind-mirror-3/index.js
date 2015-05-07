@@ -20,30 +20,55 @@ var MM3DataPacket = function(rawPacket) {
 
 };
 
-MM3DataPacket.prototype.getHeader = function() {
-    return {
-        first_byte: "first_byte",
-        size: "size",
-        checksum: "checksum",
-        dll_frame: "dll_frame"
-    };
-};
+
+MM3DataPacket.prototype.toRawHex = function() {
+      return "\nsz: " + this.packet.length + " hex: " + displayFilterRange(this.packet,0,this.packet.length)
+}
 
 MM3DataPacket.prototype.toString = function() {
-  return {
-    packet_size: decimalToHex(this.packet[1]) ,
-    frame_num: decimalToHex(this.packet[4]),
-    attenunation: decimalToHex(this.packet[6]),
-    timestamp:  decimalToHex(this.packet[7]) + decimalToHex(this.packet[8]),
-    left_emg: decimalToHex(this.packet[9]),
-    left_data: displayFilterRange(this.packet,10,14),
-    right_emg: decimalToHex(this.packet[24]),
-    right_data: displayFilterRange(this.packet,25,14)
-  };
-};
+  var last = this.packet.length;
 
-function displayFilterRange(packet,beginIndex, offset){
-  var result;
+  if(last < 64){
+    return {
+      size: this.packet.length,
+      packet: displayFilterRange(this.packet,0,this.packet.length)
+    };
+  }
+
+  var l1start = last-64;
+  var r1start = last-48;
+  var l2start = last-32;
+  var r2start = last-15;
+
+  var lbuff1 = this.packet.slice(l1start,r1start);
+  var rbuff1 = this.packet.slice(r1start,l2start);  
+  var lbuff2 = this.packet.slice(l2start, r2start);
+  var rbuff2 = this.packet.slice(r2start, last);  
+
+
+  var response = {
+    size: this.packet.length,
+    top: displayFilterRange(this.packet,0, l1start),
+    left_data_1: bufferToHex(lbuff1),
+    right_data_1: bufferToHex(rbuff1),
+    left_data_2: bufferToHex(lbuff2),
+    right_data_2: bufferToHex(rbuff2),
+    packet: displayFilterRange(this.packet,0,this.packet.length)
+  };
+
+  return response;
+}
+
+function bufferToHex(buffer){
+  var result = "";
+  for(var x = 0; x < buffer.length; x++){
+    result += decimalToHex(buffer[x]) + " ";
+  }
+  return result;
+}
+
+function displayFilterRange(packet, beginIndex, offset){
+  var result = "";
   if(packet.length < beginIndex || packet.length < beginIndex + offset){
     return "Packet it only " + packet.length + " bytes long";
   }
