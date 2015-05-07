@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mm2UiApp')
+angular.module('mm3UiApp')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

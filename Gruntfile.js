@@ -310,7 +310,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'mm2UiApp',
+        module: 'mm3UiApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -404,10 +404,10 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
-  //      'sass',
+        'sass',
       ],
       test: [
-  //      'sass',
+        'sass',
       ],
       debug: {
         tasks: [
@@ -419,7 +419,7 @@ module.exports = function (grunt) {
         }
       },
       dist: [
-   //     'sass',
+        'sass',
         'imagemin',
         'svgmin'
       ]

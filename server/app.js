@@ -6,6 +6,11 @@
 
 // Set default node environment to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+process.env.DEBUG  = process.env.NODE_ENV || "app";
+
+var MockData = require('./modules/mock-serial-data');
+var mockData = new MockData('./mm3_capture_raw2');
+mockData.connect();
 
 var express = require('express');
 var config = require('./config/environment');
@@ -14,6 +19,14 @@ var app = express();
 var server = require('http').createServer(app);
 require('./config/express')(app);
 require('./routes')(app);
+
+var logger = require('winston');
+logger.level='debug'
+
+// Load the socket server
+require('./modules/socket-server').listen(server);
+
+return;
 
 // Start server
 server.listen(config.port, config.ip, function () {

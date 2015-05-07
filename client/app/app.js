@@ -1,17 +1,23 @@
 'use strict';
 
-angular.module('mm2UiApp', [
+angular.module('mm3UiApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'nvd3ChartDirectives',
+  'btford.socket-io'
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .otherwise({
         redirectTo: '/'
       });
-
     $locationProvider.html5Mode(true);
+
+  }).factory('webSocket', function (socketFactory) {
+    var factory = socketFactory();
+    factory.forward('error');
+    return factory;
   });

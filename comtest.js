@@ -1,29 +1,47 @@
 'use strict';
+
+var serialPort = require("serialport");
+serialPort.list(function (err, ports) {
+  ports.forEach(function(port) {
+    console.log(port.comName);
+    console.log(port.pnpId);
+    console.log(port.manufacturer);
+  });
+});
+
+console.log("done");
+
+// return;
+
 var MM3 = require('./server/components/mind-mirror-3');
 var SerialPort = require('serialport').SerialPort;
-var serialport = new SerialPort("com1", {
+var portId = "/dev/ttyS0";
+var serialport = new SerialPort(portId, {
   baudrate: 9600,
   stopbits: 1,
   parity: 'none',
-//  bufferSize: 255
+  bufferSize: 36,
+  parser: serialPort.parsers.readline('27','hex')
 }, false);
 
+//  parser: serialPort.parsers.readline("\n")
+
 serialport.open(function (error) {
-	var mm3;
+	var mm3, buffer;
 
   if (error) {
-    console.log("Failed to connect to COM1: " + error);
+    console.log("Failed to connect to : " + portId + " : " + error);
     return;
   }
-  console.log("Successfully connected to COM1");
+  console.log("Successfully connected to " + portId);
   serialport.on('data', function (data) {
-  	//mm3 = new MM3(data);
-  	//console.log(data.length + " : " + data.toString('utf8'));
-  	console.log(data.length);
-	console.log(data);
-	  	
+    buffer = new Buffer(data,'binary');
+    console.log(buffer.length);
+    console.log(buffer.toString());
+  	//mm3 = new MM3(buffer);
+
+	  console.log(Math.floor(Date.now()/100));
   	//console.log(mm3.toString());
-    //printHex1(data);
   });
   serialport.on('close', function (data) {
     console.log("Close event received: " + data);
