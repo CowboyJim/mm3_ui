@@ -3,21 +3,20 @@
 var fs = require('fs');
 var MM3 = require('../components/mind-mirror-3');
 var split = require('split');
-var EventEmitter = require(‘events’).EventEmitter;
-var util = require(‘util’);
-
+var logger = require('winston');
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
+var stringify = require('json-stringify-safe');
 
 var mm3, buffer;
 var bufferArray = [];
-var interval
+//var interval
+var that;
 
 var MockSerialProvider = function (filename) {
   this.filename = filename;
+  that = this;
   console.log("Filename: " + filename);
-  init(filename);
-};
-
-function init(filename) {
   try {
     fs.createReadStream(filename)
       .pipe(split(/\x27/))
@@ -27,22 +26,28 @@ function init(filename) {
         if (buffer.length === 38) {
           mm3 = new MM3(buffer);
           bufferArray.push(mm3);
-          console.log(mm3.toRawHex());
+         // console.log(mm3.toRawHex());
         } else {
           console.log("Skipping packet of size: " + buffer.length);
         }
       });
   } catch (exception) {
-    console.log(exception);
-
+    logger.log('error', exception);
   }
-}
+};
+
+util.inherits(MockSerialProvider, EventEmitter);
 
 MockSerialProvider.prototype.connect = function () {
   var counter = 0;
   var interval = setInterval( function() {
-    console.log("Index: " + counter + " : " + bufferArray[counter].toRawHex());
-    if(counter < bufferArray.length){
+
+   if(bufferArray[counter] instanceof MM3){
+      logger.log('debug','Mock Serial: Emit packet');
+      that.emit('mm3Packet',bufferArray[counter].getAsBarGraphData());
+    }
+
+    if(counter < bufferArray.length - 1){
       counter++;
     } else {
       counter = 0;

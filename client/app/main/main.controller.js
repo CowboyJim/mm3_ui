@@ -14,67 +14,33 @@ angular.module('mm3UiApp')
 
     var commConnected = false;
     $scope.comConnectState = 'disconnect';
+    $scope.mm3Packet = undefined;
+
+    var mm3PacketListener = function (data) {
+      $scope.mm3Packet = data;
+      $log.debug("MM3 Packet Received");
+      $log.debug(JSON.stringify(data));
+    };
 
     $scope.connectToComPort = function (connect) {
 
       if (commConnected !== connect) {
-        $log.debug("Changing Comm Port state to: " + $scope.comConnectState);
         commConnected = connect;
 
         if (connect) {
           $scope.comConnectState = 'connect';
+          $log.debug("Changing Comm Port state to: connect");
           webSocket.emit('connectComm', {state: 'connect'});
+          webSocket.addListener('mm3Packet', mm3PacketListener);
+          $log.debug("Added websocket listener for event: mm3Packet");
+
         } else {
           $scope.comConnectState = 'disconnect';
           webSocket.emit('disconnectComm', {state: 'disconnect'});
+          webSocket.removeListener(mm3PacketListener);
+          $log.debug("Changing Comm Port state to: disconnect");
         }
       }
 
     };
-
-    $scope.exampleData = [
-      {
-        "key": "left",
-        "color": "#d62728",
-        "values": [
-          ["38", -10],
-          ["30", -144],
-          ["24", -180],
-          ["19", -200],
-          ["G5", -255],
-          ["G6", -255],
-          ["G7", -200],
-          ["G8", -180],
-          ["G9", -144],
-          ["G10", -140],
-          ["G11", -170],
-          ["G12", -150],
-          ["G13", -110],
-          ["G14", -50],
-          ["G15", -10]
-        ]
-      },
-      {
-        "key": "right",
-        "color": "#1f77b4",
-        "values": [
-          ["38", 10],
-          ["30", 144],
-          ["24", 180],
-          ["19", 200],
-          ["G5", 255],
-          ["G6", 255],
-          ["G7", 200],
-          ["G8", 180],
-          ["G9", 144],
-          ["G10", 140],
-          ["G11", 170],
-          ["G12", 150],
-          ["G13", 110],
-          ["G14", 50],
-          ["G15", 10]
-        ]
-      }
-    ];
-
   });

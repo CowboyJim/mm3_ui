@@ -8,8 +8,8 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.DEBUG  = process.env.NODE_ENV || "app";
 
-var MockData = require('./modules/mock-serial-data');
-var mockData = new MockData('./mm3_capture_raw2');
+var MockSerialProvider = require('./modules/mock-serial-data');
+var mockData = new MockSerialProvider('./mm3_capture_raw2');
 mockData.connect();
 
 var express = require('express');
@@ -21,12 +21,10 @@ require('./config/express')(app);
 require('./routes')(app);
 
 var logger = require('winston');
-logger.level='debug'
+logger.level='debug';
 
 // Load the socket server
-require('./modules/socket-server').listen(server);
-
-return;
+require('./modules/socket-server').listen(server,mockData);
 
 // Start server
 server.listen(config.port, config.ip, function () {
