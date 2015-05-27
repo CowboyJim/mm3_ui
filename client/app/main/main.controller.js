@@ -17,9 +17,8 @@ angular.module('mm3UiApp')
     $scope.mm3Packet = undefined;
 
     var mm3PacketListener = function (data) {
-      $scope.mm3Packet = data;
+      $scope.mm3BarGraphData = JSON.parse(data);
       $log.debug("MM3 Packet Received");
-      $log.debug(JSON.stringify(data));
     };
 
     $scope.connectToComPort = function (connect) {

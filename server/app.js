@@ -8,9 +8,12 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.DEBUG  = process.env.NODE_ENV || "app";
 
-var MockSerialProvider = require('./modules/mock-serial-data');
-var mockData = new MockSerialProvider('./mm3_capture_raw2');
-mockData.connect();
+// Import the MindMirror3 module and connect to the COM port
+var MM3 = require('mind-mirror3').MindMirror3;
+var portId = '/dev/tty.usbserial';
+var mm3 = new MM3();
+mm3.connectTo(portId).open();
+
 
 var express = require('express');
 var config = require('./config/environment');
@@ -24,7 +27,7 @@ var logger = require('winston');
 logger.level='debug';
 
 // Load the socket server
-require('./modules/socket-server').listen(server,mockData);
+require('./modules/socket-server').listen(server,mm3);
 
 // Start server
 server.listen(config.port, config.ip, function () {

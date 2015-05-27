@@ -12,14 +12,14 @@ var namesUsed = [];
 var CHANNEL_ID = 'commChannel';
 var CONNECT_COM = 'connectComm';
 var DISCONNECT_COM = 'disconnectComm';
-var commlistener;
 
 exports.listen = function (server, commServer) {
 
-  commlistener = commServer;
+  var self = this;
+  this.commlistener = commServer;
 
-  io = socketio.listen(server);
-  io.on('connection', function (socket) {
+  this.io = socketio.listen(server);
+  this.io.on('connection', function (socket) {
 
     logger.log('debug', "A client has connected");
 
@@ -38,9 +38,9 @@ exports.listen = function (server, commServer) {
   }
 
   function notifyClientJointToChannels(socket) {
-    socket.join(CHANNEL_ID);
+    socket.join();
     socket.emit('joined', {channel: CHANNEL_ID});
-    socket.broadcast.to(CHANNEL_ID).emit('message', {
+    socket.broadcast.emit('message', {
       text: clientNames[socket.id] + 'has joined the channel: ' + CHANNEL_ID
     });
   }
@@ -50,10 +50,11 @@ exports.listen = function (server, commServer) {
       logger.log('debug', "Socket command received: " + CONNECT_COM);
       eventEmitter.emit(CONNECT_COM, {message: 'connect'});
       logger.log('debug', 'mm3Packet listener added');
-      commlistener.addListener('mm3Packet', function(packet){
-        if (typeof packet != undefined) {
-          logger.log("debug","Packet: " + packet);
-          socket.broadcast.to(CHANNEL_ID).emit('mm3Packet',packet);
+
+      self.commlistener.addListener('data', function(data){
+        if (typeof data !== 'undefined') {
+          logger.debug("Com packet received. Broadcasting to clients");
+          socket.broadcast.emit('mm3Packet',JSON.stringify(data.getAsBarGraphData()));
         }
       });
     });

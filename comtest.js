@@ -16,6 +16,8 @@ console.log("done");
 var MM3 = require('./server/components/mind-mirror-3');
 var SerialPort = require('serialport').SerialPort;
 var portId = "/dev/ttyS0";
+var portId = "/dev/tty.usbserial";
+
 var serialport = new SerialPort(portId, {
   baudrate: 9600,
   stopbits: 1,
