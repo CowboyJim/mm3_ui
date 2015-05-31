@@ -1,45 +1,71 @@
 'use strict';
 
 angular.module('mm3UiApp')
-  .controller('MainCtrl', function ($scope, $http, $log, webSocket) {
+  .controller('MainCtrl', function ($scope, $http, $log, webSocket, ngTableParams) {
     $scope.awesomeThings = [];
     $http.get('/api/things').success(function (awesomeThings) {
       $scope.awesomeThings = awesomeThings;
     });
 
-    $scope.log_messages = "Now is the time for all good men to come to the aid of their country";
-    $scope.log_messages += "\nThis should be a new line";
+    $scope.log_messages = "Application initialization";
 
     webSocket.connect();
 
-    var commConnected = false;
-    $scope.comConnectState = 'disconnect';
-    $scope.mm3Packet = undefined;
+    $scope.connectToCom = false;
+
+    $scope.$watch('connectToCom', function () {
+      if ($scope.connectToCom === 'connect') {
+        $log.debug("Changing Comm Port state to: connect");
+        webSocket.emit('connectComm', {state: 'connect'});
+        webSocket.addListener('mm3Packet', mm3PacketListener);
+        $log.debug("Added websocket listener for event: mm3Packet");
+
+      } else {
+        webSocket.emit('disconnectComm', {state: 'disconnect'});
+        webSocket.removeListener(mm3PacketListener);
+        $log.debug("Changing Comm Port state to: disconnect");
+      }
+    });
 
     var mm3PacketListener = function (data) {
       $scope.mm3BarGraphData = JSON.parse(data);
       $log.debug("MM3 Packet Received");
     };
 
-    $scope.connectToComPort = function (connect) {
 
-      if (commConnected !== connect) {
-        commConnected = connect;
-
-        if (connect) {
-          $scope.comConnectState = 'connect';
-          $log.debug("Changing Comm Port state to: connect");
-          webSocket.emit('connectComm', {state: 'connect'});
-          webSocket.addListener('mm3Packet', mm3PacketListener);
-          $log.debug("Added websocket listener for event: mm3Packet");
-
-        } else {
-          $scope.comConnectState = 'disconnect';
-          webSocket.emit('disconnectComm', {state: 'disconnect'});
-          webSocket.removeListener(mm3PacketListener);
-          $log.debug("Changing Comm Port state to: disconnect");
-        }
+    /*  Define initial data for bar graph */
+    var init = [['EMG', 0], ['0.75', 0], ['1.5', 0], ['3', 0], ['4.5', 0], ['6', 0], ['7.5', 0], ['9', 0], ['10.5', 0], ['12.5', 0], ['15', 0], ['19', 0], ['24', 0], ['30', 0], ['38', 0]].reverse();
+    $scope.mm3BarGraphData = [
+      {
+        "key": "left",
+        "color": "#d62728",
+        "values": init
+      },
+      {
+        "key": "right",
+        "color": "#1f77b4",
+        "values": init
       }
+    ];
 
-    };
+
+    /*  Define initial data for file list */
+    var data = [
+      {name: "Moroni", date: new Date(), size: 1000},
+      {name: "Tiancum", date: new Date(), size: 1000},
+      {name: "Jacob", date: new Date(), size: 1000},
+      {name: "Nephi", date: new Date(), size: 1000},
+      {name: "Enos", date: new Date(), size: 1000}
+    ];
+
+    $scope.tableParams = new ngTableParams({
+      page: 1,
+      count: 10
+    }, {
+      total: data.length,
+      getData: function ($defer, params) {
+        $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+      }
+    });
+
   });

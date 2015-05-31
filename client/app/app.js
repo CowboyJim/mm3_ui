@@ -7,7 +7,9 @@ angular.module('mm3UiApp', [
   'ngRoute',
   'ui.bootstrap',
   'nvd3ChartDirectives',
-  'btford.socket-io'
+  'btford.socket-io',
+  'frapontillo.bootstrap-switch',
+  'ngTable'
 ])
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider

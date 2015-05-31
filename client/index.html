@@ -7,13 +7,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
-    <title></title>
+    <title>Mind Mirror 3 Dynamic Visual User Interface</title>
     <meta name="description" content="Mind Mirror 3 Dynamic Visual User Interface">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
+      <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
+      <link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.min.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -51,7 +53,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ng-view=""></div>
+    <div ng-view="" class="container-fluid"></div>
 
 
     <!--[if lt IE 9]>
@@ -72,6 +74,9 @@
       <script src="bower_components/nvd3/build/nv.d3.js"></script>
       <script src="bower_components/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
+      <script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+      <script src="bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.js"></script>
+      <script src="bower_components/ng-table/dist/ng-table.min.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
      <script src="bower_components/socket.io-client/socket.io.js"></script>
