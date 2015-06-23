@@ -12,17 +12,20 @@ angular.module('mm3UiApp')
     webSocket.connect();
 
     $scope.connectToCom = false;
+    $scope.hideAlert = true;
 
     $scope.$watch('connectToCom', function () {
       if ($scope.connectToCom === 'connect') {
         $log.debug("Changing Comm Port state to: connect");
         webSocket.emit('connectComm', {state: 'connect'});
         webSocket.addListener('mm3Packet', mm3PacketListener);
+        webSocket.addListener('alert', alertListener);
         $log.debug("Added websocket listener for event: mm3Packet");
 
       } else {
         webSocket.emit('disconnectComm', {state: 'disconnect'});
         webSocket.removeListener(mm3PacketListener);
+        webSocket.removeListener(alertListener);
         $log.debug("Changing Comm Port state to: disconnect");
       }
     });
@@ -31,6 +34,11 @@ angular.module('mm3UiApp')
       $scope.mm3BarGraphData = JSON.parse(data);
       $log.debug("MM3 Packet Received");
     };
+
+    var alertListener = function(hideAlert){
+       $scope.hideAlert = hideAlert;
+       $log.debug("Alert fired");
+    }
 
 
     /*  Define initial data for bar graph */

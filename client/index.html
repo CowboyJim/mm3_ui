@@ -16,11 +16,14 @@
       <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
       <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
       <link rel="stylesheet" href="bower_components/ng-table/dist/ng-table.min.css" />
+      <link rel="stylesheet" href="bower_components/pikaday/css/pikaday.css" />
+      <link rel="stylesheet" href="bower_components/handsontable/dist/handsontable.full.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
+      <link rel="stylesheet" href="app/app.css">
       <!-- endinjector -->
     <!-- endbuild -->
 
@@ -77,12 +80,19 @@
       <script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
       <script src="bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.js"></script>
       <script src="bower_components/ng-table/dist/ng-table.min.js"></script>
+      <script src="bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+      <script src="bower_components/moment/moment.js"></script>
+      <script src="bower_components/pikaday/pikaday.js"></script>
+      <script src="bower_components/handsontable/dist/handsontable.full.js"></script>
+      <script src="bower_components/ngHandsontable/dist/ngHandsontable.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
-     <script src="bower_components/socket.io-client/socket.io.js"></script>
+      <script src="assets/js/socket.io.js"></script>
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
+          <script src="app/capture/capture.controller.js"></script>
+          <script src="app/capture/capture.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
           <script src="components/modal/modal.service.js"></script>

@@ -220,10 +220,16 @@ module.exports = function (grunt) {
 
     // Automatically inject Bower components into the app
     wiredep: {
+
       target: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
+        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ],
+        overrides: {
+          'socket.io-client': {
+            main: 'socket.io.js'
+          }
+        }
       }
     },
 
@@ -355,6 +361,7 @@ module.exports = function (grunt) {
             'bower_components/**/*',
             'assets/images/{,*/}*.{webp}',
             'assets/fonts/**/*',
+            'assets/js/**/*',
             'index.html'
           ]
         }, {
@@ -367,6 +374,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
+            '*.sh',
             'server/**/*'
           ]
         }]

@@ -8,9 +8,11 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.DEBUG  = process.env.NODE_ENV || "app";
 
+var portId = process.env.MM3_PORT || '/dev/tty.usbserial';
+
 // Import the MindMirror3 module and connect to the COM port
 var MM3 = require('mind-mirror3').MindMirror3;
-var portId = '/dev/tty.usbserial';
+
 var mm3 = new MM3();
 mm3.connectTo(portId).open();
 
