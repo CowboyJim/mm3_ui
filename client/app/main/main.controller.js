@@ -2,9 +2,9 @@
 
 angular.module('mm3UiApp')
   .controller('MainCtrl', function ($scope, $http, $log, webSocket, ngTableParams) {
-    $scope.awesomeThings = [];
-    $http.get('/api/things').success(function (awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
+    $scope.config = {};
+    $http.get('/api/config').success(function (config) {
+      $scope.config = config;
     });
 
     $scope.log_messages = "Application initialization";
@@ -55,7 +55,6 @@ angular.module('mm3UiApp')
         "values": init
       }
     ];
-
 
     /*  Define initial data for file list */
     var data = [

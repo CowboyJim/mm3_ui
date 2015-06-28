@@ -65,13 +65,14 @@ exports.listen = function(server, commServer) {
         if (typeof data !== 'undefined') {
           logger.debug("Com packet received. Broadcasting to clients");
           socket.broadcast.emit('mm3Packet', JSON.stringify(data.getAsBarGraphData()));
+          socket.broadcast.emit('channelData', JSON.stringify(data.getChannelData()));
 
           // Fire alert only when state changes
-          if (alertState !== alert.evaluate(data)) {
+/*          if (alertState !== alert.evaluate(data)) {
             alertState = !alertState;
             socket.broadcast.emit('alert', alertState);
             logger.debug('Alert state changed to: ' + alertState);
-          }
+          }*/
         }
       });
     });
