@@ -55,19 +55,9 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
+    <div class="container-fluid" ng-controller="AppCtrl">
 
-<!--
-    <ul class="nav nav-tabs" ng-controller="TabsCtrl">
-      <li ng-class="tabClass(tab)" ng-repeat="tab in tabs" tab="tab">
-        <a href="{{tab.link}}" ng-click="setSelectedTab(tab)"> {{tab.label}}</a>
-      </li>
-    </ul>
-    <div ng-view class="container-fluid"></div>
--->
-
-    <div class="container-fluid">
-
-      <header class="navbar navbar-inverse col-lg-12">
+      <header class="navbar navbar-inverse col-lg-12" >
         <div class="container-fluid">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -83,7 +73,7 @@
 
             <ul class="nav navbar-nav navbar-right">
     <!--          <li>-->
-                <input class="nav"
+                <input
                   bs-switch
                   ng-model="connectToCom"
                   type="checkbox"
@@ -94,8 +84,7 @@
                   switch-off-text="Disconnected"
                   ng-true-value="'connect'"
                   ng-false-value="'disconnect'">
-<!--              </li>
-              <li><a href="#">Settings</a></li>
+<!--          <li><a href="#">Settings</a></li>
               <li><a href="#">Help</a></li>-->
             </ul>
           </div>
@@ -106,11 +95,11 @@
 
     <div class="tabbable">
       <ul class="nav nav-tabs">
-        <li ng-class="{active: currentRoute=='Display'}">
-          <a href="/">Display</a>
-        </li>
-        <li ng-class="{active: currentRoute=='capture'}">
+        <li ng-class="{active: currentRoute=='/capture'}">
           <a href="/capture">Capture</a>
+        </li>
+        <li ng-class="{active: currentRoute=='/bar_graph'}">
+          <a href="/main">Bar Graph</a>
         </li>
       </ul>
       <div class="tab-content" ng-view></div>

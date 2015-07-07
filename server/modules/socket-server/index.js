@@ -64,7 +64,7 @@ exports.listen = function(server, commServer) {
       self.commlistener.addListener('data', function(data) {
         if (typeof data !== 'undefined') {
           logger.debug("Com packet received. Broadcasting to clients");
-          socket.broadcast.emit('mm3Packet', JSON.stringify(data.getAsBarGraphData()));
+          socket.broadcast.emit('barGraphData', JSON.stringify(data.getAsBarGraphData()));
           socket.broadcast.emit('channelData', JSON.stringify(data.getChannelData()));
 
           // Fire alert only when state changes
@@ -82,7 +82,7 @@ exports.listen = function(server, commServer) {
       eventEmitter.emit(DISCONNECT_COM, {
         message: 'disconnect'
       });
-      eventEmitter.removeAllListeners('mm3Packet');
+      //eventEmitter.removeAllListeners('barGraphData');
     });
   }
 
